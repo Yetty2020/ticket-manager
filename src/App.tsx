@@ -4,6 +4,7 @@ import Login from './pages/auth/Login'
 import Signup from './pages/auth/Signup'
 import Dashboard from './pages/Dashboard'
 import TicketManager from './pages/TicketManager'
+// import './index.css'
 
 export default function App() {
   return (

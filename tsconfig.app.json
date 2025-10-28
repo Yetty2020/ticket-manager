@@ -1,28 +1,30 @@
 {
+  // Inherits base settings from the main tsconfig.json file
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-    "target": "ES2022",
-    "useDefineForClassFields": true,
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "types": ["vite/client"],
-    "skipLibCheck": true,
+    // Enable incremental compilation
+    "composite": true,
+    
+    // Set the output directory for built files
+    "outDir": "./dist",
 
-    /* Bundler mode */
+    // Specify the module system for the generated code
+    "module": "ESNext", 
+    
+    // How modules are resolved (modern bundler setting)
     "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": true,
-    "moduleDetection": "force",
-    "noEmit": true,
+    
+    // Enable JSX support and specify the factory function (React 17+)
     "jsx": "react-jsx",
 
-    /* Linting */
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "erasableSyntaxOnly": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    // List of available libraries for type checking (e.g., browser APIs, modern JS features)
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    
+    // Ensure all type definitions found are included
+    "skipLibCheck": true
   },
-  "include": ["src"]
+  // Only process files located within the 'src' directory
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  // Exclude node_modules from compilation
+  "exclude": ["node_modules"]
 }
