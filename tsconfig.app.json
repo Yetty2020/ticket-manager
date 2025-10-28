@@ -24,7 +24,7 @@
     "skipLibCheck": true
   },
   // Only process files located within the 'src' directory
-  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src"],
   // Exclude node_modules from compilation
   "exclude": ["node_modules"]
 }
