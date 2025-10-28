@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Landing from './pages/Landing'
 import Login from './pages/auth/Login'
 import Signup from './pages/auth/Signup'
-import Dashboard from './pages/dashboard'
+import Dashboard from './pages/Dashboard'
 import TicketManager from './pages/TicketManager'
 
 export default function App() {

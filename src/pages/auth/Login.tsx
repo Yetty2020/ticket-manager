@@ -1,191 +1,9 @@
-// import React, { useReducer, useState } from "react";
-// import { useNavigate } from "react-router-dom";
-// import type { LoginForm, LoginFormErrors } from "../../types/auth";
-
-
-
-// const initialValues: LoginForm = {
-//   email: "",
-//   password: "",
-// };
-
-// const initialErrors: LoginFormErrors = {};
-
-
-// type Action =
-//   | { type: "SET_FIELD"; field: keyof LoginForm; value: string }
-//   | { type: "SET_ERRORS"; errors: LoginFormErrors }
-//   | { type: "SET_SUBMITTING"; submitting: boolean }
-//   | { type: "RESET" };
-
-
-// function reducer(
-//   state: { values: LoginForm; errors: LoginFormErrors; submitting: boolean },
-//   action: Action
-// ) {
-//   switch (action.type) {
-//     case "SET_FIELD":
-//       return {
-//         ...state,
-//         values: { ...state.values, [action.field]: action.value },
-//       };
-
-//     case "SET_ERRORS":
-//       return { ...state, errors: action.errors };
-
-//     case "SET_SUBMITTING":
-//       return { ...state, submitting: action.submitting };
-
-//     case "RESET":
-//       return { values: initialValues, errors: {}, submitting: false };
-
-//     default:
-//       return state;
-//   }
-// }
-
-
-// export default function Login(): JSX.Element {
-//   const [state, dispatch] = useReducer(reducer, {
-//     values: initialValues,
-//     errors: initialErrors,
-//     submitting: false,
-//   });
-
-//   const navigate = useNavigate();
-//   const [isLoading, setIsLoading] = useState(false);
-
-//   /* Helper: simple email regex */
-//   const isValidEmail = (email: string) =>
-//     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
-
-
-//   const handleSubmit = (e: React.FormEvent) => {
-//     e.preventDefault();
-//     // reset errors
-//     dispatch({ type: "SET_ERRORS", errors: {} });
-
-//     const values = state.values;
-//     const errors: LoginFormErrors = {};
-
-//     // basic validation
-//     if (!values.email.trim()) {
-//       errors.email = "Email is required.";
-//     } else if (!isValidEmail(values.email)) {
-//       errors.email = "Please enter a valid email address.";
-//     }
-
-//     if (!values.password) {
-//       errors.password = "Password is required.";
-//     }
-
-//     if (Object.keys(errors).length > 0) {
-//       dispatch({ type: "SET_ERRORS", errors });
-//       return;
-//     }
-
-//     // start submitting
-//     setIsLoading(true);
-//     dispatch({ type: "SET_SUBMITTING", submitting: true });
-
-//     // simulate a small delay for UX (and to show disabled button)
-//     setTimeout(() => {
-//       try {
-//         // read saved signup data
-//         const raw = localStorage.getItem("userData");
-//         if (!raw) {
-//           // no user was signed up yet
-//           dispatch({
-//             type: "SET_ERRORS",
-//             errors: { general: "Email or password is incorrect." },
-//           });
-//           return;
-//         }
-
-//         let saved;
-//         try {
-//           saved = JSON.parse(raw) as { fullName?: string; email?: string; password?: string };
-//         } catch {
-//           saved = null;
-//         }
-
-//         if (!saved || saved.email !== values.email || saved.password !== values.password) {
-//           // mismatch
-//           dispatch({
-//             type: "SET_ERRORS",
-//             errors: { general: "Email or password is incorrect." },
-//           });
-//           return;
-//         }
-
-//         // success: set session token (simulated)
-//         const session = { email: saved.email, token: "fake_token_" + Date.now() };
-//         localStorage.setItem("ticketapp_session", JSON.stringify(session));
-
-//         // clear form and redirect to dashboard
-//         dispatch({ type: "RESET" });
-//         navigate("/dashboard");
-//       } finally {
-//         setIsLoading(false);
-//         dispatch({ type: "SET_SUBMITTING", submitting: false });
-//       }
-//     }, 700); // small UX delay
-//   };
-
-//   /* ---------- helper for inputs ---------- */
-//   const handleChange = (field: keyof LoginForm) => (e: React.ChangeEvent<HTMLInputElement>) =>
-//     dispatch({ type: "SET_FIELD", field, value: e.target.value });
-
-//   return (
-//     <div >
-    
-
-//       {/* general error */}
-      
-
-//       <form onSubmit={handleSubmit} noValidate>
-//         <label htmlFor="email">Email</label>
-//         <input
-//           id="email"
-//           type="email"
-//           value={state.values.email}
-//           onChange={handleChange("email")}
-//           aria-describedby={state.errors.email ? "error-email" : undefined}
-//           required
-//         />
-//         {state.errors.email && (
-//           <p id="error-email" className="error" role="alert">{state.errors.email}</p>
-//         )}
-
-//         <label htmlFor="password">Password</label>
-//         <input
-//           id="password"
-//           type="password"
-//           value={state.values.password}
-//           onChange={handleChange("password")}
-//           aria-describedby={state.errors.password ? "error-password" : undefined}
-//           required
-//         />
-//         {state.errors.password && (
-//           <p id="error-password" className="error" role="alert">{state.errors.password}</p>
-//         )}
-
-//         {state.errors.general && <p className="error" role="alert">{state.errors.general}</p>}
-
-//         <button type="submit" disabled={isLoading || state.submitting} aria-busy={isLoading}>
-//           {isLoading ? "Signing in…" : "Login"}
-//         </button>
-//       </form>
-//     </div>
-//   );
-// }
-
-
 import React, { useReducer, useState } from "react";
 import { useNavigate, Link } from "react-router-dom"; // Added Link for the Signup link
-import type { LoginForm, LoginFormErrors } from "../../types/auth";
+// Assuming these types are correctly defined and exported from your types file
+import type { LoginForm, LoginFormErrors } from "../../types/auth"; 
 
-// --- State and Reducer logic (Unchanged from your provided code) ---
+// --- State and Reducer logic (Type Fixes Applied) ---
 
 const initialValues: LoginForm = {
     email: "",
@@ -194,6 +12,13 @@ const initialValues: LoginForm = {
 
 const initialErrors: LoginFormErrors = {};
 
+// Define the structure of the Reducer State
+interface LoginState {
+    values: LoginForm;
+    errors: LoginFormErrors;
+    submitting: boolean;
+}
+
 type Action =
     | { type: "SET_FIELD"; field: keyof LoginForm; value: string }
     | { type: "SET_ERRORS"; errors: LoginFormErrors }
@@ -201,9 +26,9 @@ type Action =
     | { type: "RESET" };
 
 function reducer(
-    state: { values: LoginForm; errors: LoginFormErrors; submitting: boolean },
+    state: LoginState, // <--- Explicitly typing the state parameter
     action: Action
-) {
+): LoginState { // <--- Explicitly typing the return value
     switch (action.type) {
         case "SET_FIELD":
             return {
@@ -215,15 +40,17 @@ function reducer(
         case "SET_SUBMITTING":
             return { ...state, submitting: action.submitting };
         case "RESET":
-            return { values: initialValues, errors: {}, submitting: false };
+            // Explicitly cast the return object to match LoginState structure
+            return { values: initialValues, errors: {}, submitting: false } as LoginState; 
         default:
+            // Ensure all paths return the correct type
             return state;
     }
 }
 
 // --- Login Component with Tailwind Styling ---
 
-export default function Login(): JSX.Element {
+export default function Login() {
     const [state, dispatch] = useReducer(reducer, {
         values: initialValues,
         errors: initialErrors,
@@ -234,7 +61,7 @@ export default function Login(): JSX.Element {
     const [isLoading, setIsLoading] = useState(false);
 
     /* Helper: simple email regex */
-    const isValidEmail = (email: string) =>
+    const isValidEmail = (email: string): boolean => // <--- Explicitly typing return value
         /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -277,7 +104,8 @@ export default function Login(): JSX.Element {
                     return;
                 }
 
-                let saved;
+                // FIX: Explicitly typing the 'saved' variable using 'as'
+                let saved: { fullName?: string; email?: string; password?: string } | null; 
                 try {
                     saved = JSON.parse(raw) as { fullName?: string; email?: string; password?: string };
                 } catch {
@@ -307,11 +135,13 @@ export default function Login(): JSX.Element {
     };
 
     /* ---------- helper for inputs ---------- */
+    // FIX: Typing the function signature (e: React.ChangeEvent<HTMLInputElement>) is necessary here
     const handleChange = (field: keyof LoginForm) => (e: React.ChangeEvent<HTMLInputElement>) =>
         dispatch({ type: "SET_FIELD", field, value: e.target.value });
 
     // Helper function for input styling based on error presence
-    const getInputClasses = (error: string | undefined) =>
+    // FIX: Typing the input parameter (error: string | undefined) is necessary here
+    const getInputClasses = (error: string | undefined): string =>
         `mt-1 block w-full rounded-md border p-3 shadow-sm transition ${
             error
                 ? 'border-red-500 focus:ring-red-500'

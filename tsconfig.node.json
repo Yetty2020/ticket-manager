@@ -1,10 +1,45 @@
+// {
+//   "compilerOptions": {
+//     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
+//     "target": "ES2023",
+//     "lib": ["ES2023"],
+//     "module": "ESNext",
+//     "types": ["node"],
+//     "skipLibCheck": true,
+
+//     /* Bundler mode */
+//     "moduleResolution": "bundler",
+//     "allowImportingTsExtensions": true,
+//     "verbatimModuleSyntax": true,
+//     "moduleDetection": "force",
+//     "noEmit": true,
+
+//     /* Linting */
+//     "strict": true,
+//     "noUnusedLocals": true,
+//     "noUnusedParameters": true,
+//     "erasableSyntaxOnly": true,
+//     "noFallthroughCasesInSwitch": true,
+//     "noUncheckedSideEffectImports": true
+//   },
+//   "include": ["vite.config.ts"]
+// }
+
+
 {
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
     "target": "ES2023",
-    "lib": ["ES2023"],
+    // 1. FIX: Add 'dom' and 'dom.iterable' to recognize browser globals (like HTML elements, window, etc.)
+    "lib": ["ES2023", "dom", "dom.iterable"], 
     "module": "ESNext",
-    "types": ["node"],
+    
+    // 2. FIX: Add 'jsx' to tell TypeScript to process React syntax
+    "jsx": "react-jsx", // Assumes React 17+ and modern React structure
+    
+    // 3. FIX: Add 'react' types to link JSX with React's component definitions
+    "types": ["node", "react", "react-dom"], 
+    
     "skipLibCheck": true,
 
     /* Bundler mode */
@@ -22,5 +57,8 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["vite.config.ts"]
+  // 4. IMPORTANT: Include your React source files!
+  // The original config only included 'vite.config.ts'. 
+  // You must include the directory where your components (.tsx) are located.
+  "include": ["vite.config.ts", "src/**/*.ts", "src/**/*.tsx"] 
 }

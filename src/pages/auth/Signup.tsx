@@ -1,235 +1,9 @@
-// import { useReducer, useState } from "react";
-// import { useNavigate } from "react-router-dom";
-// import type {  FormErrors,  signUpForm } from "../../types/auth";
-
-// const initialState: signUpForm = {
-//   fullName: "",
-//   email: "",
-//   password: "",
-//   confirmPassword: "",
-//   errors: {},
-// };
-
-// type Action =
-//   | { type: "SET_FIELD"; field: keyof signUpForm; value: string }
-//   | { type: "SET_ERRORS"; errors: FormErrors }
-//   | { type: "SET_SUBMITTING"; submitting: boolean }
-//   | { type: "RESET" };
-
-// function reducer(
-//   state: { values: signUpForm; errors: FormErrors; submitting: boolean },
-//   action: Action
-// ) {
-//   switch (action.type) {
-//     case "SET_FIELD":
-//       return {
-//         ...state,
-//         values: {
-//           ...state.values,
-//           [action.field]: action.value,
-//         },
-//       };
-
-//     case "SET_ERRORS":
-//       return {
-//         ...state,
-//         errors: action.errors,
-//       };
-
-//     case "SET_SUBMITTING":
-//       return {
-//         ...state,
-//         submitting: action.submitting,
-//       };
-
-//     case "RESET":
-//       return { values: initialState, errors: {}, submitting: false };
-
-//     default:
-//       return state;
-//   }
-// }
-
-// export default function Signup() {
-//   const [state, dispatch] = useReducer(reducer, {
-//     values: initialState,
-//     errors: {},
-//     submitting: false,
-//   });
-
-//   const navigate = useNavigate(); // 👈 to redirect after signup
-//   const [isLoading, setIsLoading] = useState(false);
-
-//   // const handleSubmit = (e: React.FormEvent) => {
-//   //   e.preventDefault();
-//   //   setIsLoading(true);
-//   //   dispatch({ type: "SET_SUBMITTING", submitting: true });
-
-//   //   const newErrors: FormErrors = {};
-
-//   //   // ✅ validate name 
-//   //   if (!state.values.fullName.trim())
-//   //     newErrors.fullName = "User name is required.";
-
-//   //   // ✅ validate email
-//   //   if (!state.values.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/))
-//   //     newErrors.email = "Please enter a valid email address.";
-
-//   //   // ✅ validate password
-//   //   if (state.values.password.length < 6)
-//   //     newErrors.password = "Password must be at least 6 characters.";
-
-//   //   // ✅ confirm password
-//   //   if (state.values.password !== state.values.confirmPassword)
-//   //     newErrors.confirmPassword = "Passwords do not match.";
-
-//   //   if (Object.keys(newErrors).length > 0) {
-//   //     dispatch({ type: "SET_ERRORS", errors: newErrors });
-//   //     setIsLoading(false);
-//   //     return;
-//   //   }
-
-//   //   // ✅ store in localStorage
-//   //   localStorage.setItem("userData", JSON.stringify(state.values));
-
-//   //   // ✅ reset form
-//   //   dispatch({ type: "RESET" });
-//   //   setIsLoading(false);
-
-//   //   alert("Signup successful!");
-
-//   //   // ✅ redirect to login page after signup
-//   //   navigate("/auth/Login");
-//   // };
-
-//   const handleSubmit = (e: React.FormEvent) => {
-//   e.preventDefault();
-//   setIsLoading(true);
-
-//   const newErrors: signUpForm["errors"] = {};
-
-//   if (!state.values.fullName.trim()) newErrors.fullName = "Name is required.";
-
-//   if (!state.values.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/))
-//     newErrors.email = "Please enter a valid email address.";
-
-//   if (state.values.password.length < 6)
-//     newErrors.password = "Password must be at least 6 characters.";
-
-//   if (state.values.password !== state.values.confirmPassword)
-//     newErrors.confirmPassword = "Passwords do not match.";
-
-//   if (Object.keys(newErrors).length > 0) {
-//     dispatch({ type: "SET_ERRORS", errors: newErrors });
-//     return;
-//   }
-
-//   // 🔍 Step 1: Get existing users from localStorage
-//   const existingUsers = JSON.parse(localStorage.getItem("users") || "[]");
-
-//   // 🔍 Step 2: Check if email already exists
-//   const userExists = existingUsers.some(
-//     (user: signUpForm) => user.email === state.values.email
-//   );
-
-//   if (userExists) {
-//     dispatch({
-//       type: "SET_ERRORS",
-//       errors: { email: "User already exists. Please log in instead." },
-//     });
-//     return;
-//   }
-
-//   // ✅ Step 3: Save new user to localStorage
-//   existingUsers.push(state.values);
-//   localStorage.setItem("users", JSON.stringify(existingUsers));
-
-//   dispatch({ type: "RESET" });
-//   setIsLoading(false);
-//   alert("Signup successful! Redirecting to login...");
-
-//   // ✅ Step 4: Redirect to login page
-//   // window.location.href = "/login";
-//   navigate("/auth/Login");
-// };
-
-
-//   return (
-//     <form onSubmit={handleSubmit}>
-//       <input
-//         type="text"
-//         placeholder="User Name"
-//         value={state.values.fullName}
-//         onChange={(e) =>
-//           dispatch({
-//             type: "SET_FIELD",
-//             field: "fullName",
-//             value: e.target.value,
-//           })
-//         }
-//       />
-//       {state.errors.fullName && (
-//         <p className="error">{state.errors.fullName}</p>
-//       )}
-
-//       <input
-//         type="email"
-//         placeholder="Email"
-//         value={state.values.email}
-//         onChange={(e) =>
-//           dispatch({
-//             type: "SET_FIELD",
-//             field: "email",
-//             value: e.target.value,
-//           })
-//         }
-//       />
-//       {state.errors.email && <p className="error">{state.errors.email}</p>}
-
-//       <input
-//         type="password"
-//         placeholder="Password"
-//         value={state.values.password}
-//         onChange={(e) =>
-//           dispatch({
-//             type: "SET_FIELD",
-//             field: "password",
-//             value: e.target.value,
-//           })
-//         }
-//       />
-//       {state.errors.password && (
-//         <p className="error">{state.errors.password}</p>
-//       )}
-
-//       <input
-//         type="password"
-//         placeholder="Confirm Password"
-//         value={state.values.confirmPassword}
-//         onChange={(e) =>
-//           dispatch({
-//             type: "SET_FIELD",
-//             field: "confirmPassword",
-//             value: e.target.value,
-//           })
-//         }
-//       />
-//       {state.errors.confirmPassword && (
-//         <p className="error">{state.errors.confirmPassword}</p>
-//       )}
-
-//       <button type="submit" disabled={isLoading}>
-//         {isLoading ? "Processing..." : "Sign Up"}
-//       </button>
-//     </form>
-//   );
-// }
 
 import { useReducer, useState } from "react";
 import { useNavigate, Link } from "react-router-dom"; // Added Link for the Login link
 import type { FormErrors, signUpForm } from "../../types/auth";
 
-// --- State and Reducer logic (Unchanged from your provided code) ---
+
 
 const initialState: signUpForm = {
     fullName: "",
@@ -395,7 +169,7 @@ export default function Signup() {
                                 id="fullName"
                                 name="fullName"
                                 type="text"
-                                placeholder="e.g., Jane Doe"
+                                placeholder=""
                                 required
                                 className={getInputClasses(state.errors.fullName)}
                                 value={state.values.fullName}
@@ -419,7 +193,7 @@ export default function Signup() {
                                 id="email"
                                 name="email"
                                 type="email"
-                                placeholder="your.email@example.com"
+                                placeholder=""
                                 required
                                 className={getInputClasses(state.errors.email)}
                                 value={state.values.email}

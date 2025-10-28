@@ -1,27 +1,14 @@
-// import {Link } from 'react-router-dom'
-
-// export default function Hero() {
-//   return (
-//     <div>
-//         <h1>TICKETFLEX</h1>
-//         <p>Mange, track and resolve tickets seamlessly across all projects</p>
-
-//         <section>
-//             <Link to="/auth/Login">Login</Link>
-//             <Link to="/auth/Signup">Get Started</Link>
-            
-            
-//         </section>
-      
-//     </div>
-//   )
-// }
-
 
 import { Link } from 'react-router-dom';
 
-// Component for the decorative circle
-const DecorativeCircle = ({ size, positionClass }) => (
+// Define the interface for the DecorativeCircle component props
+interface DecorativeCircleProps {
+    size: string;
+    positionClass: string;
+}
+
+// Component for the decorative circle with explicit typing
+const DecorativeCircle = ({ size, positionClass }: DecorativeCircleProps) => (
     <div 
         className={`absolute rounded-full bg-blue-300 opacity-20 filter blur-xl ${size} ${positionClass}`}
         style={{ zIndex: 0 }}
@@ -41,7 +28,6 @@ export default function Hero() {
                 <DecorativeCircle size="w-48 h-48" positionClass="bottom-20 right-1/4 transform translate-x-1/2" />
                 
                 {/* Wavy Background using a CSS Clip-Path */}
-                {/* This large blue area includes the decorative circle required by the brief */}
                 <div 
                     className="absolute inset-x-0 bottom-0 h-4/5 bg-blue-500/20" 
                     // Applying the required wavy shape via CSS Clip-Path
@@ -50,9 +36,9 @@ export default function Hero() {
                     {/* The decorative circle must overlap the hero section content, 
                         so we place it inside the background but give it a high z-index */}
                      <div 
-                        className="absolute w-56 h-56 rounded-full bg-blue-400 opacity-30 transform translate-x-1/2 translate-y-1/2 right-1/2 top-1/2"
-                        style={{ zIndex: 2 }} 
-                    />
+                         className="absolute w-56 h-56 rounded-full bg-blue-400 opacity-30 transform translate-x-1/2 translate-y-1/2 right-1/2 top-1/2"
+                         style={{ zIndex: 2 }} 
+                     />
                 </div>
 
                 {/* --- Content (Text and CTAs) --- */}
@@ -61,7 +47,7 @@ export default function Hero() {
                         TICKETFLEX
                     </h1>
                     <p className="mt-6 text-xl text-gray-700 sm:text-2xl max-w-2xl mx-auto">
-                        **Manage, track, and resolve tickets seamlessly** across all projects with speed and clarity.
+                        Manage, track, and resolve tickets seamlessly across all projects with speed and clarity.
                     </p>
 
                     {/* Call-to-Action Buttons */}
@@ -83,8 +69,7 @@ export default function Hero() {
             </div>
 
             {/* Placeholder for the Footer to maintain consistency */}
-            {/* This would be placed in the main App layout in a production environment */}
-             <div className="mt-8 py-4 bg-gray-50 text-center text-gray-500 text-sm">
+             <div className="mt-8 py-4 bg-gray-50/50 text-center text-gray-500 text-sm rounded-xl">
                  <p>&copy; {new Date().getFullYear()} TICKETFLEX. All rights reserved.</p>
              </div>
         </div>

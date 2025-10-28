@@ -1,105 +1,35 @@
-// import { useNavigate } from "react-router-dom";
-// import { useEffect, useState } from "react";
-
-// interface Ticket {
-//   status: "Open" | "In Progress" | "Closed";
-// }
-
-// interface UserSession {
-//   fullName?: string;
-//   email?: string;
-// }
-
-// export default function Dashboard() {
-//   const navigate = useNavigate();
-
-//   const [user, setUser] = useState<UserSession | null>(null);
-
-//   const [stats, setStats] = useState({
-//     open: 0,
-//     inProgress: 0,
-//     closed: 0,
-//     total: 0,
-//   });
-
-//   // ✅ Run once when dashboard loads
-//   useEffect(() => {
-//     // Check authentication
-//     const session = localStorage.getItem("ticketapp_session");
-//     if (!session) {
-//       navigate("/auth/login");
-//       return;
-//     }
-
-//     try {
-//       const parsedUser: UserSession = JSON.parse(session);
-//       setUser(parsedUser);
-//     } catch (error) {
-//       console.error("Error parsing session data:", error);
-//       localStorage.removeItem("ticketapp_session");
-//       navigate("/auth/login");
-//       return;
-//     }
-
-//     // Load and calculate ticket stats
-//     const tickets: Ticket[] = JSON.parse(localStorage.getItem("tickets") || "[]");
-//     const open = tickets.filter((t) => t.status === "Open").length;
-//     const inProgress = tickets.filter((t) => t.status === "In Progress").length;
-//     const closed = tickets.filter((t) => t.status === "Closed").length;
-
-//     setStats({
-//       open,
-//       inProgress,
-//       closed,
-//       total: tickets.length,
-//     });
-//   }, [navigate]);
-
-//   const handleLogout = () => {
-//     localStorage.removeItem("ticketapp_session");
-//     navigate("/auth/login");
-//   };
-
-//   return (
-//     <div style={{ padding: "20px" }}>
-//       <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-//         <h2>Welcome, {user?.fullName || "User"} 👋</h2>
-//         <button onClick={handleLogout}>Logout</button>
-//       </header>
-
-//       <section style={{ display: "flex", gap: "1rem", marginTop: "20px" }}>
-//         <div>Open Tickets: {stats.open}</div>
-//         <div>In Progress: {stats.inProgress}</div>
-//         <div>Closed: {stats.closed}</div>
-//         <div>Total: {stats.total}</div>
-//       </section>
-
-//       <main style={{ marginTop: "30px" }}>
-//         <h3>Your Dashboard</h3>
-//         <p>Here you’ll see your ticket statistics soon...</p>
-//       </main>
-
-//       <button
-//         style={{ marginTop: "20px" }}
-//         onClick={() => navigate("/tickets")}
-//       >
-//         Go to Ticket Manager
-//       </button>
-//     </div>
-//   );
-// }
-
-
 import { useNavigate, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import type { Ticket } from "../../types/ticket"; // Assuming you have a types file
 
-// --- Shared Components for Layout Consistency ---
+// --- Type Definitions ---
+// Define the Ticket structure required by the useEffect hook
+interface Ticket {
+    status: "Open" | "In Progress" | "Closed";
+    // Add other fields if necessary for future functionality (id, title, etc.)
+}
+
+interface UserSession {
+    fullName?: string;
+    email?: string;
+}
+
+interface HeaderProps {
+    onLogout: () => void;
+    userName: string;
+}
+
+interface DashboardCardProps {
+    title: string;
+    value: number; // Stats values are numbers
+    barColor: string;
+}
+
+// --- Shared Components for Layout Consistency (Type Fixes Applied) ---
 
 const SESSION_KEY = "ticketapp_session";
 
-// Header component (Reused from previous code)
-const Header = ({ onLogout, userName }) => (
+// Header component (Fixed 'any' type)
+const Header = ({ onLogout, userName }: HeaderProps) => (
     <header className="bg-white shadow-md">
         <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
             <div className="text-xl font-bold text-blue-600">
@@ -123,8 +53,8 @@ const Header = ({ onLogout, userName }) => (
     </header>
 );
 
-// Dashboard Card Component
-const DashboardCard = ({ title, value, barColor }) => (
+// Dashboard Card Component (Fixed 'any' type)
+const DashboardCard = ({ title, value, barColor }: DashboardCardProps) => (
     <div className={`p-6 bg-white rounded-xl shadow-xl transition-all hover:shadow-2xl border-b-4 ${barColor}`}>
         <p className={`text-lg font-medium text-gray-700`}>{title}</p>
         <div className="mt-4 text-5xl font-extrabold text-gray-900">{value}</div>
@@ -132,11 +62,6 @@ const DashboardCard = ({ title, value, barColor }) => (
 );
 
 // --- Main Dashboard Component with Styling ---
-
-interface UserSession {
-    fullName?: string;
-    email?: string;
-}
 
 export default function Dashboard() {
     const navigate = useNavigate();
@@ -162,9 +87,9 @@ export default function Dashboard() {
         let parsedUser: UserSession = {};
         try {
             const sessionData = JSON.parse(session);
-            // In a real app, session data should contain user details or a token to fetch them.
-            // For this mockup, we check for a fake token and assume user data is in local storage.
+            // Assuming the ticket reducer and type is correctly imported or defined elsewhere
             const userDataRaw = localStorage.getItem("users");
+            // NOTE: allUsers filter 'u' is correctly inferred as UserSession from the array type
             const allUsers: UserSession[] = userDataRaw ? JSON.parse(userDataRaw) : [];
             parsedUser = allUsers.find(u => u.email === sessionData.email) || { email: sessionData.email };
             
@@ -177,11 +102,10 @@ export default function Dashboard() {
         }
 
         // Load and calculate ticket stats
-        // NOTE: The mock ticket statuses in the CRUD component were 'open', 'in_progress', 'closed' (lowercase).
-        // This Dashboard component expects 'Open', 'In Progress', 'Closed' (Title Case).
-        // I will adjust the logic here to count based on the expected Title Case values for consistency with this file.
+        // NOTE: The array 'tickets' is explicitly typed as Ticket[]
         const tickets: Ticket[] = JSON.parse(localStorage.getItem("tickets") || "[]");
 
+        // The filter callback argument 't' is correctly inferred as 'Ticket'
         const open = tickets.filter((t) => t.status === "Open").length;
         const inProgress = tickets.filter((t) => t.status === "In Progress").length;
         const closed = tickets.filter((t) => t.status === "Closed").length;
